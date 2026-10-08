@@ -103,20 +103,22 @@ deny contains result if {
 # title: PRIVILEGED_NESTED parameter
 # description: >-
 #   Verify the PRIVILEGED_NESTED parameter of a builder Tasks was not set to `true`.
+#   This is a provenance recording check rather than a security gate, since
+#   in-cluster PRIVILEGED_NESTED is privilege-equivalent to the pod itself.
 # custom:
 #   short_name: privileged_nested_param
-#   failure_msg: setting PRIVILEGED_NESTED parameter to true is not allowed
+#   failure_msg: PRIVILEGED_NESTED parameter is set to true
 #   solution: >-
-#     Setting PRIVILEGED_NESTED parameter to true is not allowed for most container
-#     image builds. Either set the parameter value to false or use a policy config
-#     that excludes this policy rule.
+#     The PRIVILEGED_NESTED parameter is set to true. This is not recommended for
+#     most container image builds. Consider setting the parameter value to false or
+#     use a policy config that excludes this policy rule.
 #   collections:
 #   - redhat
 #   - redhat_security
 #   depends_on:
 #   - attestation_type.known_attestation_type
 #
-deny contains result if {
+warn contains result if {
 	some param in _privileged_nested_params
 	trim_space(param) == "true"
 	result := metadata.result_helper(rego.metadata.chain(), [])

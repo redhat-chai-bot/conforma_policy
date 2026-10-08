@@ -380,7 +380,7 @@ test_plat_patterns_anchoring_warning if {
 test_privileged_nested_param if {
 	expected := {{
 		"code": "buildah_build_task.privileged_nested_param",
-		"msg": "setting PRIVILEGED_NESTED parameter to true is not allowed",
+		"msg": "PRIVILEGED_NESTED parameter is set to true",
 	}}
 
 	_task_base := tekton_test.slsav1_task("buildah")
@@ -404,7 +404,7 @@ test_privileged_nested_param if {
 	task = tekton_test.with_results(_task_w_params, _results)
 
 	attestation := tekton_test.slsav1_attestation([task])
-	assertions.assert_equal_results(expected, buildah_build_task.deny) with input.attestations as [attestation]
+	assertions.assert_equal_results(expected, buildah_build_task.warn) with input.attestations as [attestation]
 
 	_task_empty_base := tekton_test.slsav1_task("buildah")
 	_task_empty_w_params = tekton_test.with_params(
@@ -427,7 +427,7 @@ test_privileged_nested_param if {
 	task_empty = tekton_test.with_results(_task_empty_w_params, _results)
 
 	attestation_empty := tekton_test.slsav1_attestation([task_empty])
-	assertions.assert_empty(buildah_build_task.deny) with input.attestations as [attestation_empty]
+	assertions.assert_empty(buildah_build_task.warn) with input.attestations as [attestation_empty]
 
 	_task_false_base := tekton_test.slsav1_task("buildah")
 	_task_false_w_params = tekton_test.with_params(
@@ -450,7 +450,7 @@ test_privileged_nested_param if {
 	task_false = tekton_test.with_results(_task_false_w_params, _results)
 
 	attestation_false := tekton_test.slsav1_attestation([task_false])
-	assertions.assert_empty(buildah_build_task.deny) with input.attestations as [attestation_false]
+	assertions.assert_empty(buildah_build_task.warn) with input.attestations as [attestation_false]
 }
 
 _attestation(task_name, params, results) := {"statement": {

@@ -49,12 +49,12 @@ Verify the value of the PLATFORM parameter of a builder Task is allowed by match
 [#buildah_build_task__privileged_nested_param]
 === link:#buildah_build_task__privileged_nested_param[PRIVILEGED_NESTED parameter]
 
-Verify the PRIVILEGED_NESTED parameter of a builder Tasks was not set to `true`.
+Verify the PRIVILEGED_NESTED parameter of a builder Tasks was not set to `true`. This is a provenance recording check rather than a security gate, since in-cluster PRIVILEGED_NESTED is privilege-equivalent to the pod itself.
 
-*Solution*: Setting PRIVILEGED_NESTED parameter to true is not allowed for most container image builds. Either set the parameter value to false or use a policy config that excludes this policy rule.
+*Solution*: The PRIVILEGED_NESTED parameter is set to true. This is not recommended for most container image builds. Consider setting the parameter value to false or use a policy config that excludes this policy rule.
 
-* Rule type: [rule-type-indicator failure]#FAILURE#
-* FAILURE message: `setting PRIVILEGED_NESTED parameter to true is not allowed`
+* Rule type: [rule-type-indicator warning]#WARNING#
+* WARNING message: `PRIVILEGED_NESTED parameter is set to true`
 * Code: `buildah_build_task.privileged_nested_param`
 * https://github.com/conforma/policy/blob/{page-origin-refhash}/policy/release/buildah_build_task/buildah_build_task.rego#L102[Source, window="_blank"]
 
